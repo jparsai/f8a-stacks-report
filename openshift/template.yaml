@@ -181,6 +181,20 @@ objects:
                   value: ${PYPI_TRAINING_REPO}
                 - name: GREMLIN_QUERY_SIZE
                   value: "25"
+                - name: WORKER_ADMINISTRATION_REGION
+                  value: "api"
+                - name: INVOKE_API_WORKERS
+                  value: "1"
+                - name: AWS_SQS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: aws-sqs
+                      key: aws_access_key_id
+                - name: AWS_SQS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: aws-sqs
+                      key: aws_secret_access_key
               resources:
                 requests:
                   memory: ${MEMORY_REQUEST}
@@ -231,7 +245,7 @@ parameters:
   name: MEMORY_REQUEST
   value: "1024Mi"
 
-- description: Memory limit 
+- description: Memory limit
   displayName: Memory limit
   required: true
   name: MEMORY_LIMIT
