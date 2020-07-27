@@ -6,6 +6,9 @@ from report_helper import ReportHelper
 from v2.report_generator import StackReportBuilder
 from manifest_helper import manifest_interface
 import os
+from f8a_worker.setup_celery import init_selinon, init_celery
+from ingestion_helper import server_create_analysis
+from s3_helper import S3Helper
 
 logger = logging.getLogger(__file__)
 
@@ -80,3 +83,32 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+    # initializing Selinon queues and celery workers
+    if os.environ.get("INVOKE_API_WORKERS", "") == "1":
+        init_selinon()
+        init_celery(result_backend=False)
+
+        # Starting ingestion flow
+        today = dt.today()
+        end_date = today.strftime('%Y-%m-%d')
+
+        report_type = 'ingestion-data'
+        report_name = dt.strptime(end_date, '%Y-%m-%d').strftime('%Y-%m-%d')
+
+        s3 = S3Helper()
+        obj_key = '{type}/epv/{report_name}.json'.format(
+            type=report_type, report_name=report_name
+        )
+        ingestion_report = s3.read_json_object(bucket_name= os.environ.get('REPORT_BUCKET_NAME'),
+                                 obj_key=obj_key) or {}
+
+        ingestion_summary = ingestion_report['ingestion_summary']['missing_latest_node']
+
+        for eco, items in ingestion_summary.items():
+            for item in items:
+                logger.info("Starting ingestion flow for eco= {}, pkg= {}, ver= {}"
+                            .format(eco, item['package'], item['version']))
+                dispatcher_id = server_create_analysis(eco, item['package'], item['version'],
+                                                       force=True, force_graph_sync=False)
+                logger.info("Dispatcher_ID= {}".format(dispatcher_id))

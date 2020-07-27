@@ -11,8 +11,6 @@ RUN yum install -y epel-release &&\
     mkdir -p ${APP_DIR}
 
 RUN pip3 install --upgrade pip
-RUN pip3 install git+https://github.com/fabric8-analytics/fabric8-analytics-utils.git@${F8A_UTIL_VERSION}
-RUN pip3 install git+https://git@github.com/fabric8-analytics/fabric8-analytics-version-comparator.git#egg=f8a_version_comparator
 
 COPY f8a_report/ ${APP_DIR}/f8a_report
 COPY requirements.txt ${APP_DIR}
