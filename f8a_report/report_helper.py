@@ -725,7 +725,7 @@ class ReportHelper:
                 }
                 missing_latest[eco].append(tmp)
         template['ingestion_summary']['missing_latest_node'] = missing_latest
-        return template
+        return template, missing_latest
 
     def populate_default_information(self, epv_data, template):
         """To populate the default information in the template."""
@@ -794,7 +794,7 @@ class ReportHelper:
 
         # Call the function to get the availability of latest node
         logger.info("Checking if latest node exists in graph")
-        template = self.check_latest_node(latest_epvs, template)
+        template, missing_latest_nodes = self.check_latest_node(latest_epvs, template)
 
         # Saving the final report in the relevant S3 bucket
         try:
@@ -805,7 +805,7 @@ class ReportHelper:
                                        bucket_name=self.s3.report_bucket_name)
         except Exception as e:
             logger.exception('Unable to store the report on S3. Reason: %r' % e)
-        return template
+        return template, missing_latest_nodes
 
     def get_report(self, start_date, end_date, frequency='daily', retrain=False):
         """Generate the stacks report."""
@@ -813,10 +813,11 @@ class ReportHelper:
         ids = self.retrieve_stack_analyses_ids(start_date, end_date)
         worker_list = ['stack_aggregator_v2']
         ingestion_results = False
+        missing_latest_node = {}
 
         if frequency == 'daily':
             start = datetime.datetime.now()
-            result = self.retrieve_ingestion_results(start_date, end_date)
+            result, missing_latest_node = self.retrieve_ingestion_results(start_date, end_date)
             elapsed_seconds = (datetime.datetime.now() - start).total_seconds()
             logger.info(
                 "It took {t} seconds to generate ingestion report.".format(
@@ -838,18 +839,18 @@ class ReportHelper:
             worker_result = {}
             if not result_interim:
                 logger.error('No v1 Stack Analyses found in last 1 day.')
-                return worker_result, ingestion_results
+                return worker_result, ingestion_results, missing_latest_node
 
             for worker in worker_list:
                 if worker == 'stack_aggregator_v2':
                     worker_result[worker] = self.create_venus_report(result_interim[worker])
                 # can add results for more workers later
 
-            return worker_result, ingestion_results
+            return worker_result, ingestion_results, missing_latest_node
         else:
             logger.error('No stack analyses found from {s} to {e} to generate an aggregated report'
                          .format(s=start_date, e=end_date))
-            return False, ingestion_results
+            return False, ingestion_results, missing_latest_node
 
     def re_train(self, start_date, end_date, frequency='weekly', retrain=True):
         """Re-trains models for all ecosystems."""

@@ -284,6 +284,6 @@ def batch_query_executor(query_string, args):
             result_data += get_response_data(gremlin_response, [{0: 0}])
         else:
             _logger.error("Error while trying to fetch data from graph. "
-                          "Expected response, got None...Query->", query)
+                          "Expected response, got None...Query->{}".format(query))
 
     return result_data

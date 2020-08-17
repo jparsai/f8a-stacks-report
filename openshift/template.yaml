@@ -181,6 +181,15 @@ objects:
                   value: ${PYPI_TRAINING_REPO}
                 - name: GREMLIN_QUERY_SIZE
                   value: "25"
+                - name: APP_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: jobs
+                      key: flask-app-secret-key
+                - name: WORKER_ADMINISTRATION_REGION
+                  value: "api"
+                - name: INVOKE_API_WORKERS
+                  value: "1"
               resources:
                 requests:
                   memory: ${MEMORY_REQUEST}

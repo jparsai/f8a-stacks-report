@@ -50,7 +50,7 @@ def test_time_to_generate_monthly_report():
 
 
 @mock.patch('f8a_report.main.StackReportBuilder.get_report')
-@mock.patch('f8a_report.main.ReportHelper.get_report', return_value=[{}, True])
+@mock.patch('f8a_report.main.ReportHelper.get_report', return_value=[{}, True, {}])
 @mock.patch('f8a_report.main.ReportHelper.re_train', return_value=True)
 @mock.patch('f8a_report.main.ReportHelper.retrieve_stack_analyses_content', return_value=True)
 @mock.patch('f8a_report.main.manifest_interface', return_value=True)
@@ -70,6 +70,6 @@ def test_environment(_mock1, _mock2, _mock3):
     _mock3.return_value = ("response_v2", "ingestion_results_v2")
     resp = main()
     assert datetime.datetime.today().weekday() == 0
-    assert (isinstance(resp, tuple))
+    assert (isinstance(resp, dict))
     assert _mock2().retrieve_stack_analyses_content()[0] is True
     assert os.environ.get('GENERATE_MANIFESTS') in ['True', 'False']
