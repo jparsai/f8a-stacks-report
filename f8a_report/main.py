@@ -36,8 +36,8 @@ def main():
     # Daily Venus Report v1
     logger.info(f'Generating Daily report v1 from {start_date} to {end_date}')
     try:
-        response, ingestion_results, missing_latest_nodes = r.get_report(start_date,
-                                                                   end_date, 'daily', retrain=False)
+        response, ingestion_results, missing_latest_nodes = r.get_report(
+            start_date, end_date, 'daily', retrain=False)
         logger.info('Daily report v1 Processed.')
     except Exception as e:
         logger.error(f"Error Generating v1 report. {e}")
