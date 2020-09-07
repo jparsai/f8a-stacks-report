@@ -10,9 +10,9 @@ objects:
 - apiVersion:  batch/v1beta1
   kind: CronJob
   metadata:
-    name: f8a-stacks-report
+    name: f8a-${SUFFIX}
     annotations:
-      description: f8a-stacks-report
+      description: f8a-${SUFFIX}
   spec:
     successfulJobsHistoryLimit: 4
     failedJobsHistoryLimit: 1
@@ -26,6 +26,7 @@ objects:
             containers:
             - name: f8a-stacks-report
               image: "${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${IMAGE_TAG}"
+              args: ["${ENTRY_POINT}"]
               imagePullPolicy: Always
               env:
                 - name: BAYESIAN_GREMLIN_HTTP_SERVICE_HOST
@@ -215,6 +216,18 @@ parameters:
   required: true
   name: IMAGE_TAG
   value: "latest"
+
+- description: Entry point for docker image
+  displayName: Entry point
+  required: true
+  name: ENTRY_POINT
+  value: "f8a_report/stack_report_main.py"
+
+- description: Suffix added to the name to identify the job
+  displayName: Suffix added to the name to identify the job
+  required: true
+  name: SUFFIX
+  value: "stack-report-daily"
 
 - description: Schedule
   displayName: Schedule

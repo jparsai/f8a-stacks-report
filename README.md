@@ -1,7 +1,6 @@
 # f8a-stacks-report
 Source code for the cronjob that runs stack analyses aggregation report periodically
 
-
 ## Unit tests
 
 There's a script named `runtests.sh` that can be used to run all unit tests. The unit test coverage is reported as well by this script.
