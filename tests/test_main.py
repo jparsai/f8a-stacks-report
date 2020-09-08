@@ -40,7 +40,7 @@ class MockReportHelper(ReportHelper):
 
 
 @mock.patch('f8a_report.stack_report_main.StackReportBuilder.get_report')
-@mock.patch('f8a_report.stack_report_main.ReportHelper.get_report', return_value=[{}, True])
+@mock.patch('f8a_report.stack_report_main.ReportHelper.get_report', return_value=[{}, True, {}])
 def test_main(_mock1, _mock2):
     """Test the function main."""
     resp = main()
@@ -54,5 +54,5 @@ def test_environment(_mock1, _mock2):
     """Test the Weekday 0, Monday and GENERATE_MANIFESTS functionality."""
     resp = main()
     assert datetime.datetime.today().weekday() == 0
-    assert (isinstance(resp, tuple))
+    assert (isinstance(resp, dict))
     assert _mock1().retrieve_stack_analyses_content()[0] is True
