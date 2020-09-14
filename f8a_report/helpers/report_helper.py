@@ -812,8 +812,8 @@ class ReportHelper:
         logger.info("Get Report Executed.")
         ids = self.retrieve_stack_analyses_ids(start_date, end_date)
         worker_list = ['stack_aggregator_v2']
-        ingestion_results = False
         missing_latest_node = {}
+        worker_result = {}
 
         if frequency == 'daily':
             start = datetime.datetime.now()
@@ -822,10 +822,6 @@ class ReportHelper:
             logger.info(
                 "It took {t} seconds to generate ingestion report.".format(
                     t=elapsed_seconds))
-            if result['ingestion_details'] != {}:
-                ingestion_results = True
-            else:
-                ingestion_results = False
 
             result = self.sentry_helper.retrieve_sentry_logs(start_date, end_date)
             if not result:
@@ -836,21 +832,20 @@ class ReportHelper:
                 start_date, end_date, ids, worker_list, frequency, retrain)
 
             # generate result for each worker
-            worker_result = {}
             if not result_interim:
                 logger.error('No v1 Stack Analyses found in last 1 day.')
-                return worker_result, ingestion_results, missing_latest_node
+                return worker_result, missing_latest_node
 
             for worker in worker_list:
                 if worker == 'stack_aggregator_v2':
                     worker_result[worker] = self.create_venus_report(result_interim[worker])
                 # can add results for more workers later
 
-            return worker_result, ingestion_results, missing_latest_node
+            return worker_result, missing_latest_node
 
         logger.error('No stack analyses found from {s} to {e} to generate an aggregated report'
                      .format(s=start_date, e=end_date))
-        return False, ingestion_results, missing_latest_node
+        return worker_result, missing_latest_node
 
     def re_train(self, start_date, end_date, frequency='weekly', retrain=True):
         """Re-trains models for all ecosystems."""

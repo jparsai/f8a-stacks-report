@@ -410,7 +410,7 @@ def test_normalize_worker_data_no_stack_aggregator(_mock_count, _mock2):
             return_value={})
 def test_get_report(_mock1, _mock2, _mock3, _mock4, _mock5):
     """Test success Get Report."""
-    res, ing_res, missing = r.get_report('2018-10-10', '2018-10-18')
+    res, missing = r.get_report('2018-10-10', '2018-10-18')
     assert res is not None
 
 
@@ -426,8 +426,8 @@ def test_get_report(_mock1, _mock2, _mock3, _mock4, _mock5):
             return_value=True)
 def test_get_report_negative_results(_mock1, _mock2, _mock3, _mock4, _mock5):
     """Test failure Get Report."""
-    res, ing_res, missing = r.get_report('2018-10-10', '2018-10-18')
-    assert res is False
+    res, missing = r.get_report('2018-10-10', '2018-10-18')
+    assert len(res) == 0
 
 
 def test_retrieve_worker_results():

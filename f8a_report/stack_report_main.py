@@ -17,11 +17,12 @@ def main():
     start_date = (today - timedelta(days=1)).strftime('%Y-%m-%d')
     end_date = today.strftime('%Y-%m-%d')
     missing_latest_nodes = {}
+    response = {}
 
     # Daily Venus Report v1
     logger.info('Generating Daily report v1 from %s to %s', start_date, end_date)
     try:
-        response, ingestion_results, missing_latest_nodes = r.get_report(
+        response, missing_latest_nodes = r.get_report(
             start_date, end_date, 'daily', retrain=False)
         logger.info('Daily report v1 Processed.')
     except Exception:

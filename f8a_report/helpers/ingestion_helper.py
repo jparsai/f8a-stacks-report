@@ -30,5 +30,7 @@ def ingest_epv(missing_latest_nodes):
 
         logger.info("Ingestion API status_code: {} "
                     "and response: {}".format(response.status_code, response.json()))
+        return response
     except Exception as e:
         logger.error("Error while ingesting missing versions {}".format(e))
+        return None
