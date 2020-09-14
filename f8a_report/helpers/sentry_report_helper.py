@@ -3,7 +3,7 @@
 import os
 import logging
 import requests as requests
-from s3_helper import S3Helper
+from helpers.s3_helper import S3Helper
 from datetime import datetime as dt
 
 logger = logging.getLogger(__file__)

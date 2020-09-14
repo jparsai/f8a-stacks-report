@@ -5,7 +5,7 @@ import os
 import logging
 from datetime import datetime as dt
 from datetime import timedelta
-from graph_report_generator import get_session_retry, GREMLIN_SERVER_URL_REST
+from helpers.graph_report_generator import get_session_retry, GREMLIN_SERVER_URL_REST
 
 logger = logging.getLogger(__file__)
 

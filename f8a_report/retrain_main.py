@@ -1,7 +1,7 @@
 """Retraining pipeline initiation."""
 import logging
 from datetime import datetime as dt, timedelta
-from report_helper import ReportHelper
+from helpers.report_helper import ReportHelper
 
 logger = logging.getLogger(__file__)
 

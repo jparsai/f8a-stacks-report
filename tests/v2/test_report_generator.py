@@ -3,7 +3,7 @@
 import json
 from unittest import TestCase
 from f8a_report.v2.report_generator import StackReportBuilder
-from f8a_report.report_helper import ReportHelper
+from helpers.report_helper import ReportHelper
 from unittest.mock import patch
 
 

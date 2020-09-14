@@ -1,6 +1,6 @@
 """Tests for classes from stack_report_helper module."""
 
-from f8a_report.report_helper import ReportHelper, S3Helper
+from f8a_report.helpers.report_helper import ReportHelper, S3Helper
 import pytest
 from unittest import mock
 import json
@@ -290,7 +290,7 @@ def test_populate_key_count_failure():
         assert e.value == 'TypeError("unhashable type: \'list\'",)'
 
 
-@mock.patch('f8a_report.report_helper.S3Helper.store_json_content', return_value=True)
+@mock.patch('f8a_report.helpers.report_helper.S3Helper.store_json_content', return_value=True)
 def test_store_training_data(_mock1):
     """Test the success scenario for storing Retraining Data in their respective buckets."""
     resp = r.store_training_data(collateddata)
@@ -305,8 +305,8 @@ def test_get_training_data_for_eco():
     assert resp == manifest
 
 
-@mock.patch('f8a_report.report_helper.S3Helper.store_json_content', return_value=True)
-@mock.patch('f8a_report.report_helper.S3Helper.read_json_object', return_value=collateddata)
+@mock.patch('f8a_report.helpers.report_helper.S3Helper.store_json_content', return_value=True)
+@mock.patch('f8a_report.helpers.report_helper.S3Helper.read_json_object', return_value=collateddata)
 def test_collate_raw_data(_mock1, _mock2):
     """Test result collation success scenario."""
     result = r.collate_raw_data(unique_stacks_with_recurrence_count, 'weekly')
@@ -364,9 +364,11 @@ def test_invoke_emr_api_failure(_mock):
     assert result is None
 
 
-@mock.patch('f8a_report.report_helper.S3Helper.store_json_content', return_value=True)
-@mock.patch('f8a_report.report_helper.ReportHelper.collate_raw_data', return_value=collateddata)
-@mock.patch('f8a_report.report_helper.UnknownDepsReportHelper.get_current_ingestion_status',
+@mock.patch('f8a_report.helpers.report_helper.S3Helper.store_json_content',
+            return_value=True)
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.collate_raw_data',
+            return_value=collateddata)
+@mock.patch('f8a_report.helpers.report_helper.UnknownDepsReportHelper.get_current_ingestion_status',
             return_value={'npm': {}, 'maven': {}, 'pypi': {}})
 def test_normalize_worker_data(_mock1, _mock2, _mock3):
     """Test the success scenario of the function normalize_worker_data."""
@@ -384,8 +386,8 @@ def test_normalize_worker_data(_mock1, _mock2, _mock3):
     assert resp[2]['stacks_summary']['unique_unknown_licenses_with_frequency']['mpl-2.0'] == 2
 
 
-@mock.patch('f8a_report.report_helper.S3Helper.store_json_content', return_value=True)
-@mock.patch('f8a_report.report_helper.UnknownDepsReportHelper.get_current_ingestion_status',
+@mock.patch('f8a_report.helpers.report_helper.S3Helper.store_json_content', return_value=True)
+@mock.patch('f8a_report.helpers.report_helper.UnknownDepsReportHelper.get_current_ingestion_status',
             return_value={'npm': {}, 'maven': {}, 'pypi': {}})
 def test_normalize_worker_data_no_stack_aggregator(_mock_count, _mock2):
     """Test the success scenario of the function normalize_worker_data."""
@@ -396,31 +398,35 @@ def test_normalize_worker_data_no_stack_aggregator(_mock_count, _mock2):
     assert resp is None
 
 
-@mock.patch('f8a_report.report_helper.ReportHelper.retrieve_worker_results',
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_worker_results',
             return_value={'stack_aggregator_v2': 'val1'})
-@mock.patch('f8a_report.report_helper.ReportHelper.retrieve_stack_analyses_ids', return_value=['1'])
-@mock.patch('f8a_report.report_helper.ReportHelper.retrieve_ingestion_results',
-            return_value=[mock_true, {}])
-@mock.patch('f8a_report.sentry_report_helper.SentryReportHelper.retrieve_sentry_logs',
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_stack_analyses_ids',
+            return_value=['1'])
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_ingestion_results',
+            return_value=mock_true)
+@mock.patch('f8a_report.helpers.sentry_report_helper.SentryReportHelper.retrieve_sentry_logs',
             return_value={})
-@mock.patch('f8a_report.report_helper.ReportHelper.create_venus_report',
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.create_venus_report',
             return_value={})
 def test_get_report(_mock1, _mock2, _mock3, _mock4, _mock5):
     """Test success Get Report."""
-    res, ing_res, missing = r.get_report('2018-10-10', '2018-10-18')
+    res, ing_res = r.get_report('2018-10-10', '2018-10-18')
     assert res is not None
 
 
-@mock.patch('f8a_report.report_helper.ReportHelper.retrieve_worker_results', return_value=True)
-@mock.patch('f8a_report.report_helper.ReportHelper.retrieve_stack_analyses_ids', return_value=[])
-@mock.patch('f8a_report.report_helper.ReportHelper.retrieve_ingestion_results',
-            return_value=[mock_false, {}])
-@mock.patch('f8a_report.sentry_report_helper.SentryReportHelper.retrieve_sentry_logs',
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_worker_results',
+            return_value=True)
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_stack_analyses_ids',
+            return_value=[])
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_ingestion_results',
+            return_value=mock_false)
+@mock.patch('f8a_report.helpers.sentry_report_helper.SentryReportHelper.retrieve_sentry_logs',
             return_value={})
-@mock.patch('f8a_report.report_helper.ReportHelper.create_venus_report', return_value=True)
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.create_venus_report',
+            return_value=True)
 def test_get_report_negative_results(_mock1, _mock2, _mock3, _mock4, _mock5):
     """Test failure Get Report."""
-    res, ing_res, missing = r.get_report('2018-10-10', '2018-10-18')
+    res, ing_res = r.get_report('2018-10-10', '2018-10-18')
     assert res is False
 
 
@@ -430,12 +436,15 @@ def test_retrieve_worker_results():
     assert res == {}
 
 
-@mock.patch('f8a_report.report_helper.S3Helper.store_json_content', return_value=True)
-@mock.patch('f8a_report.report_helper.generate_report_for_unknown_epvs', return_value=unknown_json)
-@mock.patch('f8a_report.report_helper.generate_report_for_latest_version', return_value=latest_json)
+@mock.patch('f8a_report.helpers.report_helper.S3Helper.store_json_content',
+            return_value=True)
+@mock.patch('f8a_report.helpers.report_helper.generate_report_for_unknown_epvs',
+            return_value=unknown_json)
+@mock.patch('f8a_report.helpers.report_helper.generate_report_for_latest_version',
+            return_value=latest_json)
 def test_normalize_ingestion_data(_mock1, _mock2, _mock3):
     """Test the success scenario of the function normalize_worker_data."""
-    resp, missing = r.normalize_ingestion_data('2018-10-10', '2018-10-18', ingestiondata, 'daily')
+    resp = r.normalize_ingestion_data('2018-10-10', '2018-10-18', ingestiondata, 'daily')
     assert resp is not None
 
 
@@ -447,24 +456,29 @@ def test_get_trending():
     assert (res == expected_output)
 
 
-@mock.patch('f8a_report.report_helper.ReportHelper.retrieve_stack_analyses_ids', return_value=['1'])
-@mock.patch('f8a_report.report_helper.ReportHelper.retrieve_worker_results', return_value=True)
-@mock.patch('f8a_report.report_helper.ReportHelper.collate_and_retrain', return_value=True)
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_stack_analyses_ids',
+            return_value=['1'])
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_worker_results',
+            return_value=True)
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.collate_and_retrain',
+            return_value=True)
 def test_re_train(_mock1, _mock2, _mock3):
     """Test success retrain."""
     resp = r.re_train('2018-10-10', '2018-10-18')
     assert resp is None
 
 
-@mock.patch('f8a_report.report_helper.ReportHelper.save_result', return_value=True)
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.save_result', return_value=True)
 def test_create_venus_report(_mock1):
     """Test success create_venus_report."""
     resp = r.create_venus_report(['daily', '2019-09-26.json', {}])
     assert resp == {}
 
 
-@mock.patch('f8a_report.report_helper.ReportHelper.collate_raw_data', return_value=collateddata)
-@mock.patch('f8a_report.report_helper.ReportHelper.store_training_data', return_value=True)
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.collate_raw_data',
+            return_value=collateddata)
+@mock.patch('f8a_report.helpers.report_helper.ReportHelper.store_training_data',
+            return_value=True)
 def test_collate_and_retrain(_mock1, _mock2):
     """Test success create_venus_report."""
     resp = r.collate_and_retrain(unique_stacks_with_recurrence_count, 'weekly')

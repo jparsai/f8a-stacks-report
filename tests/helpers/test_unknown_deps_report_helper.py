@@ -1,6 +1,6 @@
 """Tests for classes from unknown_deps_report_helper module."""
 
-from f8a_report.unknown_deps_report_helper import UnknownDepsReportHelper
+from f8a_report.helpers.unknown_deps_report_helper import UnknownDepsReportHelper
 from unittest import mock
 
 uobj = UnknownDepsReportHelper()
@@ -34,9 +34,11 @@ def test_get_unknown_list():
     assert len(lst['npm']) == 1
 
 
-@mock.patch('f8a_report.unknown_deps_report_helper.UnknownDepsReportHelper.get_past_unknown_deps',
-            return_value=past_unknown_deps)
-@mock.patch('f8a_report.unknown_deps_report_helper.find_ingested_epv', return_value=ingested_epv)
+@mock.patch(
+    'f8a_report.helpers.unknown_deps_report_helper.UnknownDepsReportHelper.get_past_unknown_deps',
+    return_value=past_unknown_deps)
+@mock.patch('f8a_report.helpers.unknown_deps_report_helper.find_ingested_epv',
+            return_value=ingested_epv)
 def test_get_current_ingestion_status(_mock1, _mock2):
     """Test result collation success scenario."""
     result = uobj.get_current_ingestion_status()

@@ -4,7 +4,7 @@ from f8a_report.stack_report_main import main
 from unittest import mock
 from freezegun import freeze_time
 import datetime
-from f8a_report.report_helper import ReportHelper
+from helpers.report_helper import ReportHelper
 
 
 class TodayMockClass:

@@ -16,7 +16,7 @@
 #
 """In version 2, All Database Queries will be written here only."""
 
-from report_helper import Postgres
+from helpers.report_helper import Postgres
 from psycopg2 import sql
 import logging
 import json

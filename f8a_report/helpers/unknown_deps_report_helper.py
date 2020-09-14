@@ -1,8 +1,8 @@
 """Various functions related to ingestion of previously reported unknown dependencies."""
 
 from datetime import datetime as dt, timedelta
-from graph_report_generator import find_ingested_epv
-from s3_helper import S3Helper
+from helpers.graph_report_generator import find_ingested_epv
+from helpers.s3_helper import S3Helper
 import logging
 
 logger = logging.getLogger(__file__)

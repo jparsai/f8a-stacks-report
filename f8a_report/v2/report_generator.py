@@ -18,11 +18,11 @@
 
 import logging
 import json
-from cve_helper import CVE
+from helpers.cve_helper import CVE
 from datetime import datetime as dt
 from v2.db_gateway import ReportQueries
-from unknown_deps_report_helper import UnknownDepsReportHelperV2
-from s3_helper import S3Helper
+from helpers.unknown_deps_report_helper import UnknownDepsReportHelperV2
+from helpers.s3_helper import S3Helper
 
 logger = logging.getLogger(__file__)
 logging.basicConfig(level=logging.INFO)

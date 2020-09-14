@@ -2,7 +2,7 @@
 
 import random
 import json
-from s3_helper import S3Helper
+from helpers.s3_helper import S3Helper
 import logging
 import os
 import re

@@ -1,6 +1,6 @@
 """Test module for classes and functions found in the report_generator module."""
 
-from f8a_report.graph_report_generator import execute_gremlin_dsl, \
+from f8a_report.helpers.graph_report_generator import execute_gremlin_dsl, \
     generate_report_for_unknown_epvs, generate_report_for_latest_version, \
     generate_report_for_cves, find_ingested_epv, rectify_latest_version
 from unittest import mock
@@ -130,7 +130,7 @@ def mock_response3():
     return x
 
 
-@mock.patch("f8a_report.graph_report_generator.execute_gremlin_dsl")
+@mock.patch("f8a_report.helpers.graph_report_generator.execute_gremlin_dsl")
 def test_generate_report_for_unknown_epvs(mocker):
     """Test generate_report_for_unknown_epvs function."""
     mocker.return_value = mock_response()
@@ -149,7 +149,7 @@ def test_generate_report_for_unknown_epvs(mocker):
     assert out['npm@DELIM@lodash@DELIM@2.40.1'] == "false"
 
 
-@mock.patch("f8a_report.graph_report_generator.execute_gremlin_dsl")
+@mock.patch("f8a_report.helpers.graph_report_generator.execute_gremlin_dsl")
 def test_generate_report_for_latest_version(mocker):
     """Test generate_report_for_latest_version function."""
     mocker.return_value = mock_response1()
@@ -174,7 +174,7 @@ def test_generate_report_for_latest_version(mocker):
     assert out['npm@DELIM@test-hooks']['actual_latest_version'] == "1.1.1"
 
 
-@mock.patch("f8a_report.graph_report_generator.execute_gremlin_dsl")
+@mock.patch("f8a_report.helpers.graph_report_generator.execute_gremlin_dsl")
 def test_generate_report_for_cves(mocker):
     """Test generate_report_for_cves function."""
     mocker.return_value = mock_response2()
@@ -214,7 +214,7 @@ def test_execute_gremlin_dsl(mocker):
     assert out is None
 
 
-@mock.patch("f8a_report.graph_report_generator.execute_gremlin_dsl")
+@mock.patch("f8a_report.helpers.graph_report_generator.execute_gremlin_dsl")
 def test_find_ingested_epv(mocker):
     """Test the function find_ingested_epv."""
     mocker.return_value = mock_response3()

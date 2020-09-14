@@ -2,7 +2,7 @@
 
 from moto import mock_s3
 import boto3
-from f8a_report.manifest_helper import GetReport, FilterStacks, manifest_interface
+from f8a_report.helpers.manifest_helper import GetReport, FilterStacks, manifest_interface
 from unittest import mock
 import json
 import os
@@ -21,7 +21,7 @@ def test_manifests_helper():
     assert get_report
 
 
-@mock.patch('f8a_report.manifest_helper.GetReport.save_manifest_to_s3')
+@mock.patch('f8a_report.helpers.manifest_helper.GetReport.save_manifest_to_s3')
 def test_generate_manifest_for_pypi(_mock1):
     """Test to validate the generate_manifest_for_pypi method."""
     data = [stack_report[2][0]['manifest']]
@@ -29,7 +29,7 @@ def test_generate_manifest_for_pypi(_mock1):
     assert pypi_obj
 
 
-@mock.patch('f8a_report.manifest_helper.GetReport.save_manifest_to_s3')
+@mock.patch('f8a_report.helpers.manifest_helper.GetReport.save_manifest_to_s3')
 def test_generate_manifest_for_npm(_mock1):
     """Test to validate the generate_manifest_for npm method."""
     data = [json.loads(stack_report[0][0]['manifest'][0]['content'])]
@@ -37,7 +37,7 @@ def test_generate_manifest_for_npm(_mock1):
     assert npm_obj
 
 
-@mock.patch('f8a_report.manifest_helper.GetReport.save_manifest_to_s3')
+@mock.patch('f8a_report.helpers.manifest_helper.GetReport.save_manifest_to_s3')
 def test_generate_manifest_for_maven(_mock1):
     """Test to validate the generate_manifest_for_maven method."""
     data = stack_report[-2][0]['manifest']
@@ -46,7 +46,7 @@ def test_generate_manifest_for_maven(_mock1):
 
 
 @mock_s3
-@mock.patch('f8a_report.s3_helper.S3Helper.store_file_object')
+@mock.patch('f8a_report.helpers.s3_helper.S3Helper.store_file_object')
 def test_save_manifest_to_s3(_mock1):
     """Test to validate the save manifests to s3 method."""
     s3 = boto3.resource('s3')
@@ -72,18 +72,18 @@ def test_filter_stack_on_size():
     assert f_obj
 
 
-@mock.patch('f8a_report.manifest_helper.FilterStacks.filter_stacks_on_ecosystem')
+@mock.patch('f8a_report.helpers.manifest_helper.FilterStacks.filter_stacks_on_ecosystem')
 def test_manifests_interface(_mock1):
     """Test to validate the manifests interface method."""
     mi = manifest_interface(stack_report, 1)
     assert mi
 
 
-@mock.patch('f8a_report.manifest_helper.FilterStacks.filter_stacks_on_size')
-@mock.patch('f8a_report.manifest_helper.FilterStacks.clean_stacks')
-@mock.patch('f8a_report.manifest_helper.GetReport.generate_manifest_for_npm')
-@mock.patch('f8a_report.manifest_helper.GetReport.generate_manifest_for_maven')
-@mock.patch('f8a_report.manifest_helper.GetReport.generate_manifest_for_pypi')
+@mock.patch('f8a_report.helpers.manifest_helper.FilterStacks.filter_stacks_on_size')
+@mock.patch('f8a_report.helpers.manifest_helper.FilterStacks.clean_stacks')
+@mock.patch('f8a_report.helpers.manifest_helper.GetReport.generate_manifest_for_npm')
+@mock.patch('f8a_report.helpers.manifest_helper.GetReport.generate_manifest_for_maven')
+@mock.patch('f8a_report.helpers.manifest_helper.GetReport.generate_manifest_for_pypi')
 def test_filter_stacks_on_ecosystem(_mock1, _mock2, _mock3, _mock4, _mock5):
     """Test to validate the filter stacks on ecosystem method."""
     fs = FilterStacks()

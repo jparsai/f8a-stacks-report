@@ -2,7 +2,7 @@
 import pytest
 import json
 from unittest import mock
-from f8a_report.cve_helper import CVE
+from f8a_report.helpers.cve_helper import CVE
 from datetime import datetime as dt
 from requests.exceptions import Timeout
 
@@ -72,7 +72,7 @@ def mock_graph_post(*_args, **_kwargs):
     return MockResponse(graph_cve_response, 200)
 
 
-@mock.patch('f8a_report.cve_helper.CVE.call_github_api')
+@mock.patch('f8a_report.helpers.cve_helper.CVE.call_github_api')
 def test_get_cveids_from_cvedb_prs(_mock1):
     """Test get CVEs from CVEDB PRs."""
     _mock1.side_effect = [github_api_response, ValueError]
@@ -108,7 +108,7 @@ def test_validate_cveids_in_graph(_mock1):
     assert len(ingested) == 0
 
 
-@mock.patch('f8a_report.cve_helper.CVE.call_github_api')
+@mock.patch('f8a_report.helpers.cve_helper.CVE.call_github_api')
 def test_get_fp_cves_count(_mock1):
     """Test fp CVEs count."""
     _mock1.side_effect = [github_api_response, ValueError]
@@ -135,7 +135,7 @@ def test_call_github_api(_mock1):
         cve.call_github_api('')
 
 
-@mock.patch('f8a_report.cve_helper.CVE.call_github_api')
+@mock.patch('f8a_report.helpers.cve_helper.CVE.call_github_api')
 def test_get_open_cves_count(_mock1):
     """Test open CVEs count."""
     # Test a valid test case
@@ -144,11 +144,11 @@ def test_get_open_cves_count(_mock1):
     assert cve_stat is not None
 
 
-@mock.patch('f8a_report.cve_helper.CVE.get_open_cves_count', return_value=cve_stats)
-@mock.patch('f8a_report.cve_helper.CVE.get_fp_cves_count', return_value=2)
-@mock.patch('f8a_report.cve_helper.CVE.get_cveids_from_cvedb_prs', return_value=[
+@mock.patch('f8a_report.helpers.cve_helper.CVE.get_open_cves_count', return_value=cve_stats)
+@mock.patch('f8a_report.helpers.cve_helper.CVE.get_fp_cves_count', return_value=2)
+@mock.patch('f8a_report.helpers.cve_helper.CVE.get_cveids_from_cvedb_prs', return_value=[
     'CVE-2017-1000116'])
-@mock.patch('f8a_report.cve_helper.CVE.validate_cveids_in_graph', return_value=(1, 0))
+@mock.patch('f8a_report.helpers.cve_helper.CVE.validate_cveids_in_graph', return_value=(1, 0))
 def test_generate_cve_report(_mock1, _mock2, _mock3, _mock4):
     """Test CVE generat report."""
     cve_report = cve.generate_cve_report(dt.today().strftime('%Y-%m-%d'))

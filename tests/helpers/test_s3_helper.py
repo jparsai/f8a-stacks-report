@@ -1,6 +1,6 @@
 """Tests for classes from s3_helper module."""
 
-from f8a_report.s3_helper import S3Helper
+from f8a_report.helpers.s3_helper import S3Helper
 from moto import mock_s3
 import boto3
 import os

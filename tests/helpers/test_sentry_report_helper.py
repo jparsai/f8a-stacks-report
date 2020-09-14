@@ -1,6 +1,6 @@
 """Tests for classes from sentry_report_helper module."""
 
-from f8a_report.sentry_report_helper import SentryReportHelper
+from f8a_report.helpers.sentry_report_helper import SentryReportHelper
 import responses
 
 sobj = SentryReportHelper()

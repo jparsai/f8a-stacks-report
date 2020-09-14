@@ -2,7 +2,7 @@
 
 from unittest import TestCase
 from f8a_report.v2.db_gateway import ReportQueries
-from tests.test_stack_report_helper import MockPostgres
+from tests.helpers.test_stack_report_helper import MockPostgres
 
 
 class MyMockPostgres(MockPostgres):
