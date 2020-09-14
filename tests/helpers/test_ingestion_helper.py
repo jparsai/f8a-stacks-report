@@ -8,7 +8,7 @@ _APP_SECRET_KEY = os.getenv('APP_SECRET_KEY', 'not-set')
 _INGESTION_API_URL = "http://{host}:{port}/{endpoint}".format(
     host=os.environ.get("INGESTION_SERVICE_HOST", "bayesian-jobs"),
     port=os.environ.get("INGESTION_SERVICE_PORT", "34000"),
-    endpoint='ingestions/ingest-epv')
+    endpoint='ingestions/epv')
 
 ingestion_resp = {
     "dispacher_ids":
