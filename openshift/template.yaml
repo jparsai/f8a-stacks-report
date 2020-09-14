@@ -187,10 +187,6 @@ objects:
                     secretKeyRef:
                       name: jobs
                       key: flask-app-secret-key
-                - name: WORKER_ADMINISTRATION_REGION
-                  value: "api"
-                - name: INVOKE_API_WORKERS
-                  value: "1"
               resources:
                 requests:
                   memory: ${MEMORY_REQUEST}
