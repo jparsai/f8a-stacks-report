@@ -847,10 +847,10 @@ class ReportHelper:
                 # can add results for more workers later
 
             return worker_result, ingestion_results, missing_latest_node
-        else:
-            logger.error('No stack analyses found from {s} to {e} to generate an aggregated report'
-                         .format(s=start_date, e=end_date))
-            return False, ingestion_results, missing_latest_node
+
+        logger.error('No stack analyses found from {s} to {e} to generate an aggregated report'
+                     .format(s=start_date, e=end_date))
+        return False, ingestion_results, missing_latest_node
 
     def re_train(self, start_date, end_date, frequency='weekly', retrain=True):
         """Re-trains models for all ecosystems."""

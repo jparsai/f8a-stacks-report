@@ -403,14 +403,14 @@ def test_normalize_worker_data_no_stack_aggregator(_mock_count, _mock2):
 @mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_stack_analyses_ids',
             return_value=['1'])
 @mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_ingestion_results',
-            return_value=mock_true)
+            return_value=[mock_true, {}])
 @mock.patch('f8a_report.helpers.sentry_report_helper.SentryReportHelper.retrieve_sentry_logs',
             return_value={})
 @mock.patch('f8a_report.helpers.report_helper.ReportHelper.create_venus_report',
             return_value={})
 def test_get_report(_mock1, _mock2, _mock3, _mock4, _mock5):
     """Test success Get Report."""
-    res, ing_res = r.get_report('2018-10-10', '2018-10-18')
+    res, ing_res, missing = r.get_report('2018-10-10', '2018-10-18')
     assert res is not None
 
 
@@ -419,14 +419,14 @@ def test_get_report(_mock1, _mock2, _mock3, _mock4, _mock5):
 @mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_stack_analyses_ids',
             return_value=[])
 @mock.patch('f8a_report.helpers.report_helper.ReportHelper.retrieve_ingestion_results',
-            return_value=mock_false)
+            return_value=[mock_false, {}])
 @mock.patch('f8a_report.helpers.sentry_report_helper.SentryReportHelper.retrieve_sentry_logs',
             return_value={})
 @mock.patch('f8a_report.helpers.report_helper.ReportHelper.create_venus_report',
             return_value=True)
 def test_get_report_negative_results(_mock1, _mock2, _mock3, _mock4, _mock5):
     """Test failure Get Report."""
-    res, ing_res = r.get_report('2018-10-10', '2018-10-18')
+    res, ing_res, missing = r.get_report('2018-10-10', '2018-10-18')
     assert res is False
 
 
@@ -444,7 +444,7 @@ def test_retrieve_worker_results():
             return_value=latest_json)
 def test_normalize_ingestion_data(_mock1, _mock2, _mock3):
     """Test the success scenario of the function normalize_worker_data."""
-    resp = r.normalize_ingestion_data('2018-10-10', '2018-10-18', ingestiondata, 'daily')
+    resp, missing = r.normalize_ingestion_data('2018-10-10', '2018-10-18', ingestiondata, 'daily')
     assert resp is not None
 
 
