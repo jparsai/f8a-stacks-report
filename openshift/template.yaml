@@ -192,6 +192,11 @@ objects:
                     secretKeyRef:
                       name: dynamic-manifests
                       key: bucket
+                - name: APP_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: jobs
+                      key: flask-app-secret-key
               resources:
                 requests:
                   memory: ${MEMORY_REQUEST}

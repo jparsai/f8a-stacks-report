@@ -19,7 +19,7 @@ decorator==4.4.2          # via networkx
 docker==4.3.0             # via moto
 docutils==0.15.2          # via botocore
 ecdsa==0.14.1             # via python-jose, sshpubkeys
-git+https://github.com/fabric8-analytics/fabric8-analytics-utils.git@44c123b#egg=f8a_utils  # via -r requirements.in
+git+https://github.com/fabric8-analytics/fabric8-analytics-utils.git@e220735#egg=f8a_utils  # via -r requirements.in
 git+https://github.com/fabric8-analytics/fabric8-analytics-version-comparator.git@8a57ac7#egg=f8a_version_comparator  # via f8a-utils
 freezegun==0.3.15         # via -r requirements.in
 future==0.18.2            # via aws-xray-sdk
