@@ -17,7 +17,7 @@ NORMAL=$(tput sgr0)
 RED=$(tput bold && tput setaf 1)
 GREEN=$(tput bold && tput setaf 2)
 YELLOW=$(tput bold && tput setaf 3)
-F8A_UTIL_VERSION=de8046b
+F8A_UTIL_VERSION=e220735
 
 printf "%sShutting down docker-compose ..." "${NORMAL}"
 

@@ -45,6 +45,33 @@ objects:
                   value: ${SENTRY_API_ISSUES}
                 - name: SENTRY_API_TAGS
                   value: ${SENTRY_API_TAGS}
+                - name: GOLANG_TRAINING_REPO
+                  value: ${GOLANG_TRAINING_REPO}
+                - name: MAVEN_TRAINING_REPO
+                  value: ${MAVEN_TRAINING_REPO}
+                - name: NPM_TRAINING_REPO
+                  value: ${NPM_TRAINING_REPO}
+                - name: PYPI_TRAINING_REPO
+                  value: ${PYPI_TRAINING_REPO}
+                - name: GREMLIN_QUERY_SIZE
+                  value: "25"
+                - name: PGBOUNCER_SERVICE_HOST
+                  value: bayesian-pgbouncer
+                - name: SNYK_API_TOKEN_VALIDATION_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: bayesian-config
+                      key: snyk_api_token_validation_url
+                - name: DEPLOYMENT_PREFIX
+                  valueFrom:
+                    configMapKeyRef:
+                      name: bayesian-config
+                      key: deployment-prefix
+                - name: AWS_S3_REGION
+                  valueFrom:
+                    configMapKeyRef:
+                      name: bayesian-config
+                      key: aws-default-region
                 - name: AWS_S3_SECRET_ACCESS_KEY
                   valueFrom:
                     secretKeyRef:
@@ -105,18 +132,6 @@ objects:
                     secretKeyRef:
                       name: golang-insights-s3
                       key: aws_access_key_id
-                - name: DEPLOYMENT_PREFIX
-                  valueFrom:
-                    configMapKeyRef:
-                      name: bayesian-config
-                      key: deployment-prefix
-                - name: AWS_S3_REGION
-                  valueFrom:
-                    configMapKeyRef:
-                      name: bayesian-config
-                      key: aws-default-region
-                - name: PGBOUNCER_SERVICE_HOST
-                  value: bayesian-pgbouncer
                 - name: POSTGRESQL_DATABASE
                   valueFrom:
                     secretKeyRef:
@@ -167,26 +182,16 @@ objects:
                     secretKeyRef:
                       name: golang-insights-s3
                       key: bucket
+                - name: ENCRYPTION_KEY_FOR_SNYK_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: snyk-secrets
+                      key: encryption_key_for_snyk_token
                 - name: MANIFESTS_BUCKET
                   valueFrom:
                     secretKeyRef:
                       name: dynamic-manifests
                       key: bucket
-                - name: GOLANG_TRAINING_REPO
-                  value: ${GOLANG_TRAINING_REPO}
-                - name: MAVEN_TRAINING_REPO
-                  value: ${MAVEN_TRAINING_REPO}
-                - name: NPM_TRAINING_REPO
-                  value: ${NPM_TRAINING_REPO}
-                - name: PYPI_TRAINING_REPO
-                  value: ${PYPI_TRAINING_REPO}
-                - name: GREMLIN_QUERY_SIZE
-                  value: "25"
-                - name: APP_SECRET_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: jobs
-                      key: flask-app-secret-key
               resources:
                 requests:
                   memory: ${MEMORY_REQUEST}
