@@ -7,4 +7,5 @@ responses
 boto3<=1.12.35
 moto<=1.3.14
 boto<=2.49.0
+tenacity
 f8a_utils @ git+https://github.com/fabric8-analytics/fabric8-analytics-utils.git@e220735#egg=f8a_utils

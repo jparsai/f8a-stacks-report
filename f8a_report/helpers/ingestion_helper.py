@@ -3,6 +3,7 @@
 import logging
 import os
 import requests
+import tenacity
 
 logger = logging.getLogger(__file__)
 
@@ -13,6 +14,7 @@ _INGESTION_API_URL = "http://{host}:{port}/{endpoint}".format(
     endpoint='ingestions/epv')
 
 
+@tenacity.retry(reraise=True, stop=tenacity.stop_after_attempt(3), wait=tenacity.wait_fixed(1))
 def ingest_epv(missing_latest_nodes):
     """
     Initialize Selinon workers.
