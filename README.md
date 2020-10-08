@@ -1,5 +1,10 @@
 # f8a-stacks-report
-Source code for the cronjob that runs stack analyses aggregation report periodically
+Source code for multiple cron jobs
+- Stacks Report Daily
+- Stacks Report Monthly
+- DB CLean up Daily
+- Snyk Token Validation Daily
+- Dynamic Manifest Weekly
 
 ## Unit tests
 
